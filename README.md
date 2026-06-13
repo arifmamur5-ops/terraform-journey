@@ -1,36 +1,38 @@
-# Terraform Journey: Infrastructure as Code (IaC) Fundamentals
+# Terraform Journey
 
-This repository contains my hands-on learning module for Terraform fundamentals. It demonstrates the core principles of Infrastructure as Code (IaC) using the Terraform Docker Provider to spin up, modify, and destroy containerized applications deterministically.
+Infrastructure as Code (IaC) for Web3 node deployment.
 
-##Core IaC Concepts Learned
+## Projects
 
-1. **Declarative Configuration:** Defining infrastructure blueprints inside `.tf` files using HashiCorp Configuration Language (HCL).
-2. **Immutable Infrastructure:** Understanding that infrastructure updates (like changing ports) should destroy and recreate resources (`-/+` replace) rather than mutating them in place.
-3. **State Management:** Learning how Terraform uses the `terraform.tfstate` file as its "memory" to map real-world resources to the local configuration. *(Note: This file is securely ignored via `.gitignore` to prevent credential leaks).*
+### 1. Docker Provider (Basic)
+Location: `docker/`
+- Deploy Nginx container via Terraform
+- Demonstrates immutable infrastructure concept
+- Port modification triggers destroy + recreate
 
-## Workflow & Lifecycle Commands
+### 2. LocalStack (AWS Simulation)
+Location: `localstack/`
+- Simulates AWS S3 + IAM locally without cloud account
+- S3 bucket for Web3 node config storage
+- IAM role for EC2 instance permissions
+- Variables and tfvars for environment management
 
-Below is the standard lifecycle workflow implemented in this project:
+## Key Concepts Learned
+- `terraform init` → download providers
+- `terraform plan` → preview changes
+- `terraform apply` → apply changes
+- `terraform destroy` → remove all resources
+- `terraform.tfstate` → never commit to public repo
+- Immutable infrastructure: modify = destroy + recreate
+- Variables vs hardcoded values
 
-```bash
-# 1. Initialize the project and download required providers
-terraform init
+## Security Notes
+- `terraform.tfstate` excluded via `.gitignore`
+- `.terraform/` excluded via `.gitignore`
+- RPC CIDR restricted to `10.0.0.0/8` in production
 
-# 2. Preview the execution plan (Dry Run)
-terraform plan
-
-# 3. Create and deploy the infrastructure automatically
-terraform apply
-
-# 4. View managed resources inside the state file
-terraform state list
-
-# 5. Destroy all managed infrastructure completely
-terraform destroy
-
-
-## Tech Stack
-- ​OS: Arch Linux
-​- IaC Tool: Terraform v1.x
-​- Target Provider: Docker Engine
-​- Deployed Stack: Nginx (Web Server)
+## Stack
+- Terraform v1.15.5
+- AWS Provider v5.100.0
+- Docker Provider v3.x
+- LocalStack v3.8.1 (community)
